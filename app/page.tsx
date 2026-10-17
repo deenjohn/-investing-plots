@@ -11,7 +11,6 @@ import {
   faqs,
   interestWhatsappText,
   partner,
-  phoneDisplay,
   plotTypes,
   reasons,
   social,
@@ -60,11 +59,6 @@ export default function Home() {
             <a href="#faq">FAQ</a>
           </nav>
           <div className="header-cta">
-            {tel ? (
-              <a className="btn btn-ghost-dark btn-sm hide-sm" href={tel} data-where="header">
-                <PhoneIcon /> {phoneDisplay()}
-              </a>
-            ) : null}
             {wa ? (
               <a className="btn btn-wa btn-sm" href={wa} target="_blank" rel="noreferrer" data-where="header">
                 <WaIcon /> <span>WhatsApp</span>
