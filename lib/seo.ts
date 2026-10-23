@@ -1,18 +1,20 @@
 import { brand, contact, faqs, SITE_URL, social } from "./site";
 
-export const title = "Investing Plots | Buy Plots & Land for Investment in India";
+export const title = "Invest in Plots | Gaur Yamuna City, Noida & Yamuna Expressway";
 export const description =
-  "Residential, commercial, industrial and farm plots for investment. Share your budget and city — get plots, price lists and documents on WhatsApp.";
+  "Plots in Gaur Yamuna City, and 6% plots in Noida, Yamuna Expressway and Greater Noida. Ace Plots, Webcity Plots and Lodha Group Plots — price list and documents on WhatsApp.";
 
 export const keywords = [
+  "plots in Gaur Yamuna City",
+  "6% plots Noida",
+  "6% plots Yamuna Expressway",
+  "6% plots Greater Noida",
+  "Ace Plots",
+  "Webcity Plots",
+  "Lodha Group Plots",
   "plots for investment",
-  "investment plots",
-  "buy plot in India",
-  "land investment India",
-  "residential plots for sale",
-  "commercial plots",
-  "industrial land for sale",
-  "farm land for sale",
+  "Yamuna Expressway plots",
+  "Greater Noida plots",
   "RERA approved plots",
   "plot price list",
 ];

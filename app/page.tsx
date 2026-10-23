@@ -1,21 +1,19 @@
 import { LeadForm } from "@/components/LeadForm";
 import { PlotIllustration } from "@/components/PlotIllustration";
-import { PhoneIcon, WaIcon } from "@/components/icons";
+import { SiteChrome } from "@/components/SiteChrome";
+import { WaIcon } from "@/components/icons";
 import { jsonLd } from "@/lib/seo";
+import { enquiries, enquiryWhatsappText, projectPages } from "@/lib/projects";
 import {
-  brand,
   budgets,
   checks,
   cities,
   defaultWhatsappText,
   faqs,
   interestWhatsappText,
-  partner,
   plotTypes,
   reasons,
-  social,
   steps,
-  telHref,
   whatsappHref,
   type InterestId,
 } from "@/lib/site";
@@ -29,57 +27,57 @@ const promises = [
 
 export default function Home() {
   const wa = whatsappHref(defaultWhatsappText);
-  const tel = telHref();
-  const links = Object.entries(social).filter(([, url]) => /^https:\/\//.test(url));
+  const pages = projectPages();
 
   return (
-    <>
+    <SiteChrome
+      nav={[
+        { href: "#projects", label: "Projects" },
+        { href: "#plots", label: "Plot types" },
+        { href: "#why", label: "Why plots" },
+        { href: "#faq", label: "FAQ" },
+      ]}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd()).replace(/</g, "\\u003c") }}
       />
-      <a className="skip" href="#main">
-        Skip to content
-      </a>
-
-      <header className="header">
-        <div className="wrap header-row">
-          <a className="logo" href="/">
-            <span className="logo-mark" aria-hidden="true">
-              {brand.mark}
-            </span>
-            <span className="logo-text">
-              Investing<b>Plots</b>
-            </span>
-          </a>
-          <nav className="nav" aria-label="Sections">
-            <a href="#plots">Plot types</a>
-            <a href="#why">Why plots</a>
-            <a href="#checks">Checks</a>
-            <a href="#faq">FAQ</a>
-          </nav>
-          <div className="header-cta">
-            {wa ? (
-              <a className="btn btn-wa btn-sm" href={wa} target="_blank" rel="noreferrer" data-where="header">
-                <WaIcon /> <span>WhatsApp</span>
-              </a>
-            ) : null}
-          </div>
-        </div>
-      </header>
 
       <main id="main">
         {/* ---------- Hero: headline + form above the fold ---------- */}
         <section className="hero" id="enquire" aria-labelledby="hero-title">
           <div className="wrap hero-grid">
             <div className="hero-copy">
-              <p className="eyebrow">Plots · Land · India</p>
+              <p className="eyebrow">Noida · Yamuna Expressway · Greater Noida</p>
               <h1 id="hero-title">
-                Invest in <span className="hl">plots</span> with clear titles and approvals
+                Invest in <span className="hl">plots</span> in Gaur Yamuna City
+                <span className="hero-keys">
+                  <a href="#enquire" data-project="six">
+                    6% plots
+                  </a>
+                  {" · "}
+                  <a href="#enquire" data-city="Noida">
+                    Noida
+                  </a>
+                  {" · "}
+                  <a href="#enquire" data-city="Yamuna Expressway">
+                    Yamuna Expressway
+                  </a>
+                  {" · "}
+                  <a href="#enquire" data-city="Greater Noida">
+                    Greater Noida
+                  </a>
+                  {" · "}
+                  <a href="/ace-plots">Ace Plots</a>
+                  {" · "}
+                  <a href="/webcity-plots">Webcity Plots</a>
+                  {" · "}
+                  <a href="/lodha-plots">Lodha Group Plots</a>
+                </span>
               </h1>
               <p className="lede">
-                Residential, commercial, industrial and farm plots. Tell us your budget and city — we send matching
-                plots, the price list and the documents on WhatsApp, then arrange a site visit.
+                Tell us your budget and city — we send matching plots, the price list and the documents on WhatsApp,
+                then arrange a site visit.
               </p>
               <ul className="ticks">
                 <li>Shortlist that fits your budget</li>
@@ -108,6 +106,58 @@ export default function Home() {
               </li>
             ))}
           </ul>
+        </section>
+
+        {/* ---------- Named projects ---------- */}
+        <section className="section" id="projects" aria-labelledby="projects-title">
+          <div className="wrap">
+            <div className="head">
+              <p className="eyebrow">Projects</p>
+              <h2 id="projects-title">Plots you can ask about today</h2>
+              <p className="sub">
+                Gaur Yamuna City, 6% plots, Ace Plots, Webcity Plots and Lodha Group Plots. Open a project or send your
+                budget for a shortlist.
+              </p>
+            </div>
+            <ul className="cards cards-projects">
+              {enquiries.map((item) => {
+                const page = pages.find((project) => project.id === item.id);
+                const ask = whatsappHref(enquiryWhatsappText(item.name));
+                return (
+                  <li className="card plot" key={item.id}>
+                    <h3>{item.name}</h3>
+                    <p>{item.blurb}</p>
+                    <div className="plot-actions">
+                      <a
+                        className="btn btn-sm btn-primary"
+                        href="#enquire"
+                        data-project={item.id}
+                        {...(item.city ? { "data-city": item.city } : {})}
+                      >
+                        Get options
+                      </a>
+                      {page ? (
+                        <a className="btn btn-sm btn-ghost-dark" href={page.path}>
+                          Details
+                        </a>
+                      ) : ask ? (
+                        <a
+                          className="btn btn-sm btn-wa-outline"
+                          href={ask}
+                          target="_blank"
+                          rel="noreferrer"
+                          data-where={`project-${item.id}`}
+                          aria-label={`Ask on WhatsApp about ${item.name}`}
+                        >
+                          <WaIcon /> Ask
+                        </a>
+                      ) : null}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </section>
 
         {/* ---------- Plot types ---------- */}
@@ -271,77 +321,7 @@ export default function Home() {
           </div>
         </section>
       </main>
-
-      <footer className="footer">
-        <div className="wrap footer-grid">
-          <div>
-            <p className="logo-text logo-light">
-              Investing<b>Plots</b>
-            </p>
-            <p>{brand.tagline}.</p>
-            {partner.agentRera ? <p>RERA agent reg. no. {partner.agentRera}</p> : null}
-          </div>
-          <div>
-            <p className="foot-h">Contact</p>
-            {wa ? (
-              <p>
-                <a href={wa} target="_blank" rel="noreferrer" data-where="footer">
-                  WhatsApp
-                </a>
-              </p>
-            ) : null}
-          </div>
-          <div>
-            <p className="foot-h">Links</p>
-            <p>
-              <a href="#plots">Plot types</a>
-            </p>
-            <p>
-              <a href="#faq">FAQ</a>
-            </p>
-            <p>
-              <a href="/privacy">Privacy policy</a>
-            </p>
-            {links.map(([key, url]) => (
-              <p key={key}>
-                <a href={url} target="_blank" rel="noreferrer me">
-                  {key[0].toUpperCase() + key.slice(1)}
-                </a>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className="wrap disclaimer">
-          <p>
-            {brand.name} is an independent real-estate advisory and channel partner, not a developer or a government
-            body. Information on this site is general and not financial advice. Land prices can go down as well as up;
-            no return is promised or guaranteed. Verify all documents and RERA details before paying.
-          </p>
-          <p>
-            © {new Date().getFullYear()} {brand.name} · {brand.domain}
-          </p>
-        </div>
-      </footer>
-
-      {/* Mobile: thumb-reach bar. Desktop: floating WhatsApp button. Pure CSS, no JS. */}
-      <div className="mobile-bar">
-        {tel ? (
-          <a className="btn btn-ghost-dark" href={tel} data-where="sticky">
-            <PhoneIcon /> Call
-          </a>
-        ) : null}
-        {wa ? (
-          <a className="btn btn-wa" href={wa} target="_blank" rel="noreferrer" data-where="sticky">
-            <WaIcon /> WhatsApp
-          </a>
-        ) : null}
-      </div>
-      {wa ? (
-        <a className="wa-float" href={wa} target="_blank" rel="noreferrer" data-where="float" aria-label="Chat on WhatsApp">
-          <WaIcon />
-        </a>
-      ) : null}
-    </>
+    </SiteChrome>
   );
 }
 

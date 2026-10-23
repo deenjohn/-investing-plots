@@ -143,6 +143,20 @@ button, input, select { font: inherit; color: inherit; }
 }
 .hero .eyebrow, .eyebrow-light { color: var(--gold-light); }
 .hl { color: var(--gold-light); }
+.hero-keys {
+  display: block; margin-top: 0.8rem; max-width: 40rem;
+  font-size: clamp(1.02rem, 2.1vw, 1.28rem); font-weight: 700; letter-spacing: 0; line-height: 1.5;
+  color: #d7e2ef; text-wrap: pretty;
+}
+.hero-keys a {
+  color: var(--gold-light); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
+  white-space: nowrap;
+}
+.hero-note { margin: 1rem 0 0; max-width: 38rem; font-size: 0.86rem; color: #b7c6d8; }
+.project-lock {
+  margin: -0.35rem 0 0.9rem; padding: 0.55rem 0.75rem; border-radius: 8px;
+  background: #fff8ea; color: var(--ink); font-weight: 600;
+}
 .lede { font-size: 1.08rem; color: #e3eaf4; max-width: 38rem; }
 .ticks { display: grid; gap: 0.45rem; margin: 1.1rem 0 1.4rem; }
 .ticks li { position: relative; padding-left: 1.8rem; font-weight: 600; }
@@ -308,6 +322,7 @@ button, input, select { font: inherit; color: inherit; }
   .promise-grid li { border-top: 0; border-left: 1px solid rgba(255, 255, 255, 0.12); padding: 1.4rem 1.2rem; }
   .promise-grid li:first-child { border-left: 0; }
   .cards-4 { grid-template-columns: repeat(2, 1fr); }
+  .cards-projects { grid-template-columns: repeat(2, 1fr); }
   .hide-sm { display: inline-flex; }
 }
 
@@ -320,6 +335,7 @@ button, input, select { font: inherit; color: inherit; }
   .hero-actions .btn { flex: 0 1 auto; padding-inline: 2.2rem; }
   .section { padding: 5rem 0; }
   .cards-4 { grid-template-columns: repeat(4, 1fr); }
+  .cards-projects { grid-template-columns: repeat(3, 1fr); }
   .split { grid-template-columns: 1fr 1fr; gap: 3.5rem; }
   .steps { grid-template-columns: repeat(3, 1fr); }
   .cta-row { grid-template-columns: 1.4fr 1fr; }

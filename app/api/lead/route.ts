@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { after, type NextRequest } from "next/server";
+import { findEnquiry } from "@/lib/projects";
 import { findBudget, findInterest, isIndianMobile, normalizeIndianMobile } from "@/lib/site";
 
 /**
@@ -51,6 +52,8 @@ export async function POST(req: NextRequest) {
     return Response.json({ ok: false, error: "Check the email address." }, { status: 422 });
   }
 
+  const project = findEnquiry(clip(body.project, 40));
+
   const campaign: Record<string, string> = {};
   if (body.campaign && typeof body.campaign === "object") {
     for (const [k, v] of Object.entries(body.campaign as Record<string, unknown>).slice(0, 20)) {
@@ -64,6 +67,7 @@ export async function POST(req: NextRequest) {
     phone: `+91${phone}`,
     email,
     interest: interest.label,
+    project: project?.label || "",
     budget: findBudget(clip(body.budget, 20))?.label || "",
     city: clip(body.city, 60),
     page: clip(body.page, 500),
@@ -116,7 +120,11 @@ export async function POST(req: NextRequest) {
                   fbp,
                   fbc,
                 },
-                custom_data: { content_name: interest.label, currency: "INR", value: 1 },
+                custom_data: {
+                  content_name: project ? `${project.label} — ${interest.label}` : interest.label,
+                  currency: "INR",
+                  value: 1,
+                },
               },
             ],
           }),

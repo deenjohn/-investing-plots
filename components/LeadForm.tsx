@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import { enquiries, findEnquiry, type EnquiryId } from "@/lib/projects";
 import {
   budgets,
   cities,
@@ -32,7 +33,7 @@ function newEventId() {
   }
 }
 
-export function LeadForm() {
+export function LeadForm({ project }: { project?: EnquiryId }) {
   const id = useId();
   const nameRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState("");
@@ -40,6 +41,7 @@ export function LeadForm() {
   const [interest, setInterest] = useState<InterestId | "">("");
   const [budget, setBudget] = useState<BudgetId | "">("");
   const [city, setCity] = useState("");
+  const [projectId, setProjectId] = useState<EnquiryId | "">(project ?? "");
   const [company, setCompany] = useState(""); // honeypot
   const [errors, setErrors] = useState<Errors>({});
   const [sent, setSent] = useState<{ href: string; name: string } | null>(null);
@@ -49,26 +51,32 @@ export function LeadForm() {
     const params = new URLSearchParams(window.location.search);
     const i = findInterest(params.get("interest"));
     const b = findBudget(params.get("budget"));
+    const p = project ? undefined : findEnquiry(params.get("project"));
     const c = (params.get("city") || "").replace(/[^\p{L}\p{N} ,.-]/gu, "").slice(0, 60);
     if (i) setInterest(i.id);
     if (b) setBudget(b.id);
+    if (p) setProjectId(p.id);
     if (c) setCity(c);
 
-    // Any element with data-interest / data-budget / data-city preselects and jumps to the form.
+    // Any element with data-interest / data-budget / data-city / data-project preselects and jumps to the form.
     const onClick = (event: MouseEvent) => {
-      const el = (event.target as Element | null)?.closest?.("[data-interest],[data-budget],[data-city]") as HTMLElement | null;
-      if (!el) return;
+      const el = (event.target as Element | null)?.closest?.(
+        "[data-interest],[data-budget],[data-city],[data-project]",
+      ) as HTMLElement | null;
+      if (!el || el.closest("form")) return;
       const pickedInterest = findInterest(el.dataset.interest);
       const pickedBudget = findBudget(el.dataset.budget);
+      const pickedProject = project ? undefined : findEnquiry(el.dataset.project);
       if (pickedInterest) setInterest(pickedInterest.id);
       if (pickedBudget) setBudget(pickedBudget.id);
+      if (pickedProject) setProjectId(pickedProject.id);
       if (el.dataset.city) setCity(el.dataset.city);
       setSent(null);
       window.setTimeout(() => nameRef.current?.focus({ preventScroll: true }), 400);
     };
     document.addEventListener("click", onClick);
     return () => document.removeEventListener("click", onClick);
-  }, []);
+  }, [project]);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -88,12 +96,14 @@ export function LeadForm() {
     const campaign = readCampaign();
     const eventId = newEventId();
     const budgetLabel = findBudget(budget)?.label || "";
+    const pickedProject = findEnquiry(projectId);
     const message = [
       "Hello, I want to invest in a plot.",
       "",
       `Name: ${name.trim()}`,
       `Mobile: +91 ${mobile.slice(0, 5)} ${mobile.slice(5)}`,
       `Looking for: ${chosen.label}`,
+      pickedProject ? `Project: ${pickedProject.label}` : "",
       budgetLabel ? `Budget: ${budgetLabel}` : "",
       city.trim() ? `City / area: ${city.trim()}` : "",
       campaignLine(campaign),
@@ -110,6 +120,7 @@ export function LeadForm() {
         name: name.trim(),
         phone: mobile,
         interest: chosen.id,
+        project: projectId,
         budget,
         city: city.trim(),
         company,
@@ -127,8 +138,10 @@ export function LeadForm() {
   }
 
   const chosen = findInterest(interest);
-  const title =
-    chosen && chosen.id !== "price-list" && chosen.id !== "site-visit"
+  const pickedProject = findEnquiry(projectId);
+  const title = pickedProject
+    ? `Get ${pickedProject.short} options on WhatsApp`
+    : chosen && chosen.id !== "price-list" && chosen.id !== "site-visit"
       ? `Get ${chosen.short} options on WhatsApp`
       : "Get plot options and prices on WhatsApp";
 
@@ -161,6 +174,7 @@ export function LeadForm() {
       <h2 className="form-title" id={`${id}-title`}>
         {title}
       </h2>
+      {project && pickedProject ? <p className="project-lock">Project: {pickedProject.label}</p> : null}
 
       <div className="field">
         <label htmlFor={`${id}-name`}>Name</label>
@@ -228,6 +242,22 @@ export function LeadForm() {
         </select>
         {errors.interest ? <span className="err" id={`${id}-interest-err`}>{errors.interest}</span> : null}
       </div>
+
+      {project ? null : (
+        <div className="field">
+          <label htmlFor={`${id}-project`}>
+            Project <span className="opt">(optional)</span>
+          </label>
+          <select id={`${id}-project`} name="project" value={projectId} onChange={(e) => setProjectId(e.target.value as EnquiryId)}>
+            <option value="">Any project</option>
+            {enquiries.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div className="field-row">
         <div className="field">

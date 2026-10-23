@@ -38,7 +38,7 @@ export const social = {
  * Cities / regions you sell in. Shown as chips and offered in the form.
  * Leave the array empty to hide the section — then the form asks for a city as free text.
  */
-export const cities: string[] = [];
+export const cities: string[] = ["Gaur Yamuna City", "Noida", "Yamuna Expressway", "Greater Noida"];
 
 export const interests = [
   { id: "residential", label: "Residential plot", short: "residential plot" },
