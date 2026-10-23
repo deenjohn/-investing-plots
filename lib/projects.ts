@@ -1,6 +1,7 @@
 /**
  * Named projects and locations from the sales list.
- * Pages exist only where `path` is set: /ace-plots, /webcity-plots, /lodha-plots.
+ * Pages exist only where `path` is set: /gaur-yamuna-city, /6-percent-plots, /ace-plots, /webcity-plots, /lodha-plots.
+ * `heading`, `seoTitle` and `seoDescription` override the defaults on that project's page.
  */
 
 export const enquiries = [
@@ -9,16 +10,25 @@ export const enquiries = [
     name: "Gaur Yamuna City",
     label: "Plots in Gaur Yamuna City",
     short: "Gaur Yamuna City plots",
+    path: "/gaur-yamuna-city",
     city: "Gaur Yamuna City",
-    blurb: "Plots in Gaur Yamuna City. Ask for sizes, the current price list and the papers.",
+    blurb: "Gaurs Group’s 250-acre township in Sector 19, YEIDA, opposite the F1 circuit on the Yamuna Expressway. Ask for sizes, the price list and the RERA papers.",
+    heading: "Plots in Gaur Yamuna City, Yamuna Expressway",
+    seoTitle: "Gaur Yamuna City Plots | Sector 19, YEIDA, Yamuna Expressway",
+    seoDescription: "Plots in Gaur Yamuna City, Gaurs Group’s 250-acre township in Sector 19, YEIDA, opposite the F1 circuit. Price list, sizes and RERA papers on WhatsApp.",
   },
   {
     id: "six",
     name: "6% plots",
     label: "6% plots in Noida, Yamuna Expressway and Greater Noida",
     short: "6% plots",
+    path: "/6-percent-plots",
     city: "",
-    blurb: "6% plots in Noida, along the Yamuna Expressway and in Greater Noida. Share your budget and the area you prefer.",
+    blurb: "Developed plots the authority gives back to farmers whose land it acquired, bought from the farmer and transferred to you. Share your budget and the sector you prefer.",
+    heading: "6% plots in Greater Noida, Noida and the Yamuna Expressway",
+    seoTitle: "6% Plots in Greater Noida & YEIDA | What They Are, How to Buy",
+    note: "Investing Plots is an independent advisory. We help you buy from the farmer allottee and see the authority transfer through.",
+    seoDescription: "What a 6% (abadi) plot is, why buyers like them, and the 7 papers to check before you buy one in Greater Noida, Noida or on the Yamuna Expressway.",
   },
   {
     id: "ace",

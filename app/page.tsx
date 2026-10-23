@@ -50,9 +50,11 @@ export default function Home() {
             <div className="hero-copy">
               <p className="eyebrow">Noida · Yamuna Expressway · Greater Noida</p>
               <h1 id="hero-title">
-                Invest in <span className="hl">plots</span> in Gaur Yamuna City
+                Invest in <span className="hl">plots</span>
                 <span className="hero-keys">
-                  <a href="#enquire" data-project="six">
+                  <a href="/gaur-yamuna-city">Gaur Yamuna City</a>
+                  {" · "}
+                  <a href="/6-percent-plots">
                     6% plots
                   </a>
                   {" · "}

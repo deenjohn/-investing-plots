@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { LeadForm } from "@/components/LeadForm";
 import { SiteChrome } from "@/components/SiteChrome";
 import { WaIcon } from "@/components/icons";
@@ -12,8 +13,11 @@ const points = [
 ];
 
 export function projectMetadata(project: ProjectPage): Metadata {
-  const title = `${project.name} | Noida, Yamuna Expressway & Greater Noida`;
-  const description = `Ask for ${project.name} in Noida, on the Yamuna Expressway and in Greater Noida. Get the price list and documents on WhatsApp.`;
+  const title = "seoTitle" in project ? project.seoTitle : `${project.name} | Noida, Yamuna Expressway & Greater Noida`;
+  const description =
+    "seoDescription" in project
+      ? project.seoDescription
+      : `Ask for ${project.name} in Noida, on the Yamuna Expressway and in Greater Noida. Get the price list and documents on WhatsApp.`;
   return {
     title,
     description,
@@ -31,7 +35,7 @@ export function projectMetadata(project: ProjectPage): Metadata {
   };
 }
 
-export function ProjectLanding({ project }: { project: ProjectPage }) {
+export function ProjectLanding({ project, children }: { project: ProjectPage; children?: ReactNode }) {
   const wa = whatsappHref(enquiryWhatsappText(project.name));
   const others = projectPages().filter((item) => item.id !== project.id);
   const jsonLd = {
@@ -61,7 +65,7 @@ export function ProjectLanding({ project }: { project: ProjectPage }) {
             <div className="hero-copy">
               <p className="eyebrow">{project.name}</p>
               <h1 id="hero-title">
-                {project.name} in Noida, Yamuna Expressway and Greater Noida
+                {"heading" in project ? project.heading : `${project.name} in Noida, Yamuna Expressway and Greater Noida`}
               </h1>
               <p className="lede">{project.blurb}</p>
               <ul className="ticks">
@@ -72,7 +76,7 @@ export function ProjectLanding({ project }: { project: ProjectPage }) {
               <div className="hero-actions">
                 {wa ? (
                   <a className="btn btn-wa btn-lg" href={wa} target="_blank" rel="noreferrer" data-where={`hero-${project.id}`}>
-                    <WaIcon /> Chat on WhatsApp
+                    <WaIcon /> Get {project.name} options on WhatsApp
                   </a>
                 ) : null}
                 <a className="btn btn-ghost btn-lg" href="/#projects">
@@ -80,12 +84,14 @@ export function ProjectLanding({ project }: { project: ProjectPage }) {
                 </a>
               </div>
               <p className="hero-note">
-                {brand.name} is an independent advisory, not the developer of {project.name}.
+                {"note" in project ? project.note : `${brand.name} is an independent advisory, not the developer of ${project.name}.`}
               </p>
             </div>
             <LeadForm project={project.id} />
           </div>
         </section>
+
+        {children}
 
         <section className="section" aria-labelledby="related-title">
           <div className="wrap">
