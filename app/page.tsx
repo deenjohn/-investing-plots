@@ -87,7 +87,7 @@ export default function Home() {
               <div className="hero-actions">
                 {wa ? (
                   <a className="btn btn-wa btn-lg" href={wa} target="_blank" rel="noreferrer" data-where="hero">
-                    <WaIcon /> Chat on WhatsApp
+                    <WaIcon /> Get plot options on WhatsApp
                   </a>
                 ) : null}
               </div>
