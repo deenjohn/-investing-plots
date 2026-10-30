@@ -1,4 +1,5 @@
 import { LeadForm } from "@/components/LeadForm";
+import { MapEmbed } from "@/components/MapEmbed";
 import { SiteChrome } from "@/components/SiteChrome";
 import { PhoneIcon, WaIcon } from "@/components/icons";
 import { breadcrumb, ldJson, pageMetadata } from "@/lib/seo";
@@ -99,6 +100,7 @@ export default function ContactUs() {
                 </li>
               ) : null}
             </ul>
+            <MapEmbed query={compliance.officeAddress} title={`Map of the ${compliance.legalName} office`} />
             <p className="fine">
               How we use your details: <a href="/privacy">privacy policy</a>. Site terms: <a href="/terms">terms</a>.
               Check any RERA number on the <a href="https://www.up-rera.in/" target="_blank" rel="noreferrer">UP RERA portal</a>.

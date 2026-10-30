@@ -37,7 +37,10 @@ export const enquiries = [
     short: "Ace Plots",
     path: "/ace-plots",
     city: "",
-    blurb: "Ace Plots in Noida, on the Yamuna Expressway and in Greater Noida. Sizes, price list and documents on WhatsApp.",
+    blurb: "ACE Group’s plotted township ACE Estate in Sector 22D, YEIDA, on the Yamuna Expressway: plots of 150, 200, 300 and 500 sq yd. Sizes, price list and RERA papers on WhatsApp.",
+    heading: "ACE Estate plots in Sector 22D, Yamuna Expressway",
+    seoTitle: "ACE Estate Plots Sector 22D YEIDA | Ace Group Plots, Yamuna Expressway",
+    seoDescription: "ACE Group’s plotted township in Sector 22D, YEIDA on the Yamuna Expressway. Plots of 150, 200, 300 and 500 sq yd. Get the price list, payment plan and RERA papers on WhatsApp.",
   },
   {
     id: "webcity",

@@ -11,6 +11,7 @@ import {
   defaultWhatsappText,
   faqs,
   interestWhatsappText,
+  partner,
   plotTypes,
   reasons,
   steps,
@@ -48,35 +49,21 @@ export default function Home() {
         <section className="hero" id="enquire" aria-labelledby="hero-title">
           <div className="wrap hero-grid">
             <div className="hero-copy">
-              <p className="eyebrow">Noida · Yamuna Expressway · Greater Noida</p>
+              <p className="eyebrow">{partner.agentRera ? `UP RERA registered agent · ${partner.agentRera}` : "Plot investment advisory"}</p>
               <h1 id="hero-title">
-                Invest in <span className="hl">plots</span>
-                <span className="hero-keys">
-                  <a href="/gaur-yamuna-city">Gaur Yamuna City</a>
-                  {" · "}
-                  <a href="/6-percent-plots">
-                    6% plots
-                  </a>
-                  {" · "}
-                  <a href="#enquire" data-city="Noida">
-                    Noida
-                  </a>
-                  {" · "}
-                  <a href="#enquire" data-city="Yamuna Expressway">
-                    Yamuna Expressway
-                  </a>
-                  {" · "}
-                  <a href="#enquire" data-city="Greater Noida">
-                    Greater Noida
-                  </a>
-                  {" · "}
-                  <a href="/ace-plots">Ace Plots</a>
-                  {" · "}
-                  <a href="/webcity-plots">Webcity Plots</a>
-                  {" · "}
-                  <a href="/lodha-plots">Lodha Group Plots</a>
-                </span>
+                <span className="hl">Plots</span> for investment in Noida, Greater Noida &amp; Yamuna Expressway
               </h1>
+              <p className="hero-keys" aria-label="Popular projects">
+                <a href="/gaur-yamuna-city">Gaur Yamuna City</a>
+                {" · "}
+                <a href="/6-percent-plots">6% plots</a>
+                {" · "}
+                <a href="/ace-plots">Ace Plots</a>
+                {" · "}
+                <a href="/webcity-plots">Webcity Plots</a>
+                {" · "}
+                <a href="/lodha-plots">Lodha Group Plots</a>
+              </p>
               <p className="lede">
                 Tell us your budget and city — we send matching plots, the price list and the documents on WhatsApp,
                 then arrange a site visit.

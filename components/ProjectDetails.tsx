@@ -1,4 +1,5 @@
 import { WaIcon } from "@/components/icons";
+import { MapEmbed } from "@/components/MapEmbed";
 import { enquiryWhatsappText } from "@/lib/projects";
 import { whatsappHref } from "@/lib/site";
 
@@ -196,10 +197,20 @@ export function SixPercentDetails() {
 const gaurFacts = [
   { label: "Where", value: "Sector 19, YEIDA, Yamuna Expressway (Exit 2C)" },
   { label: "Size", value: "About 250 acres (101 ha) integrated township" },
-  { label: "Developer", value: "Gaurs Group (Gaursons India)" },
+  { label: "Developer", value: "Gaurs Group (Gaursons Realtech Pvt. Ltd.)" },
   { label: "Landmark", value: "Opposite the Buddh International (F1) Circuit" },
   { label: "Airport", value: "On the road to the Noida International Airport, Jewar" },
-  { label: "RERA (Aerocity commercial plots)", value: "UPRERAPRJ342117" },
+  { label: "Inside", value: "9-acre Yamuna Lake Park with boating, planned by RSP Singapore" },
+] as const;
+
+const gaurPhases = [
+  { name: "Waterfront Plots, 1st-B Parkview", type: "Residential plots, lake facing", rera: "UPRERAPRJ235739" },
+  { name: "Lakeshore Villas, 1st-A Parkview", type: "Residential plots", rera: "UPRERAPRJ574384" },
+  { name: "2nd Parkview", type: "Residential plots", rera: "UPRERAPRJ4464" },
+  { name: "Victorian Villas, 6th Parkview", type: "Villas and residential plots", rera: "UPRERAPRJ15838" },
+  { name: "Shri Radhey Kunj, 7th Parkview", type: "Residential plots", rera: "UPRERAPRJ16087" },
+  { name: "32nd Parkview", type: "Residential plots", rera: "UPRERAPRJ4193" },
+  { name: "Aerocity Yamuna", type: "Commercial plots", rera: "UPRERAPRJ342117" },
 ] as const;
 
 const gaurWhy = [
@@ -220,11 +231,11 @@ const gaurFaqs: readonly Faq[] = [
   },
   {
     q: "Is Gaur Yamuna City RERA registered?",
-    a: "The Aerocity commercial plots are listed under UP RERA number UPRERAPRJ342117. Each phase has its own registration, so check the number for the exact plot you buy on the UP RERA website.",
+    a: "Yes, phase by phase. For example, Waterfront Plots (1st-B Parkview) is UPRERAPRJ235739, Lakeshore Villas (1st-A Parkview) is UPRERAPRJ574384 and the Aerocity commercial plots are UPRERAPRJ342117. The full list is on this page. Check the number for the exact plot you buy on the UP RERA website.",
   },
   {
     q: "What plot sizes are available?",
-    a: "It depends on the phase and what is unsold. Send your budget and we share current sizes, the price list and the payment plan on WhatsApp.",
+    a: "It depends on the phase and what is unsold. Waterfront Plots, for example, range from 88.20 sq m (about 105 sq yd) to 182.81 sq m (about 219 sq yd). Send your budget and we share current sizes, the price list and the payment plan on WhatsApp.",
   },
 ];
 
@@ -267,11 +278,117 @@ export function GaurYamunaDetails() {
         </div>
       </section>
 
+      <section className="section" id="gaur-rera" aria-labelledby="gaur-rera-title">
+        <div className="wrap narrow">
+          <div className="head">
+            <p className="eyebrow">RERA</p>
+            <h2 id="gaur-rera-title">Plot phases in Gaur Yamuna City and their UP RERA numbers</h2>
+          </div>
+          <table className="rera-table">
+            <thead>
+              <tr>
+                <th scope="col">Phase</th>
+                <th scope="col">Type</th>
+                <th scope="col">UP RERA no.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {gaurPhases.map((p) => (
+                <tr key={p.rera}>
+                  <td>{p.name}</td>
+                  <td>{p.type}</td>
+                  <td>
+                    <code>{p.rera}</code>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="fine">
+            As listed by the developer. Verify any number on the{" "}
+            <a className="text-link" href="https://www.up-rera.in/" target="_blank" rel="noreferrer">
+              UP RERA portal
+            </a>{" "}
+            before you pay.
+          </p>
+          <MapEmbed query="Gaur Yamuna City, Sector 19, Yamuna Expressway, Greater Noida" title="Map of Gaur Yamuna City" />
+        </div>
+      </section>
+
       <FaqBlock id="gaur-faq" title="Questions about Gaur Yamuna City" items={gaurFaqs} />
       <AskBand
         name="Gaur Yamuna City"
         title="Want the Gaur Yamuna City price list?"
         body="Tell us your budget and plot size. We send available plots, the current price list, the RERA papers and arrange a site visit."
+      />
+    </>
+  );
+}
+
+/* ───────────────────────── ACE Estate (Ace Plots) ───────────────────────── */
+
+const aceFacts = [
+  { label: "Project", value: "ACE Estate, a plotted township" },
+  { label: "Where", value: "Sector 22D, YEIDA, Yamuna Expressway, Greater Noida" },
+  { label: "Developer", value: "ACE Group" },
+  { label: "Plot sizes", value: "150, 200, 300 and 500 sq yd" },
+  { label: "Airport", value: "On the Yamuna Expressway corridor to the Noida International Airport, Jewar" },
+  { label: "Price", value: "Current price list on request, per sq yd" },
+] as const;
+
+const aceFaqs: readonly Faq[] = [
+  {
+    q: "Where is ACE Estate?",
+    a: "In Sector 22D of the Yamuna Expressway Authority area (YEIDA), Greater Noida, on the Yamuna Expressway towards the Noida International Airport at Jewar.",
+  },
+  {
+    q: "What plot sizes does ACE Estate have?",
+    a: "Plots of 150, 200, 300 and 500 sq yd, as published by ACE Group. Which sizes are still available changes, so we confirm availability for your budget.",
+  },
+  {
+    q: "What is the ACE Estate plot price?",
+    a: "Prices are set per sq yd and change with each release, plus charges such as preferential location and registration. Send your budget and we share the current price list and payment plan in writing.",
+  },
+  {
+    q: "Is ACE Estate RERA registered?",
+    a: "Ask us for the UP RERA registration certificate of the exact phase you are offered, and check it on the UP RERA portal before paying any booking amount.",
+  },
+  {
+    q: "Are Ace Terra and Ace Verde plots?",
+    a: "No. Ace Terra (Sector 22D) and Ace Verde (Sector 22A) are ACE Group apartment projects. ACE Estate is the group’s plotted project in the area.",
+  },
+];
+
+export function AceDetails() {
+  return (
+    <>
+      <section className="section" id="facts" aria-labelledby="ace-facts-title">
+        <div className="wrap">
+          <div className="head">
+            <p className="eyebrow">At a glance</p>
+            <h2 id="ace-facts-title">ACE Estate in six facts</h2>
+          </div>
+          <ul className="cards cards-projects">
+            {aceFacts.map((f) => (
+              <li className="card" key={f.label}>
+                <p className="eyebrow">{f.label}</p>
+                <h3>{f.value}</h3>
+              </li>
+            ))}
+          </ul>
+          <p className="fine">
+            Facts as published by the developer. Investing Plots is an independent advisory, not ACE Group. Sizes,
+            prices and approvals are confirmed in writing for your plot.
+          </p>
+          <MapEmbed query="Sector 22D, Yamuna Expressway, Greater Noida, Uttar Pradesh" title="Map of Sector 22D, YEIDA" />
+        </div>
+      </section>
+
+      <FaqBlock id="ace-faq" title="Questions about ACE Estate plots" items={aceFaqs} />
+      <AskBand
+        name="ACE Estate"
+        title="Want the ACE Estate price list?"
+        body="Tell us the plot size you want. We send what is available, the current price list, the RERA papers and arrange a site visit."
       />
     </>
   );

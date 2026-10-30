@@ -360,3 +360,16 @@ button, input, select { font: inherit; color: inherit; }
   html { scroll-behavior: auto; }
   .btn { transition: none; }
 }
+
+/* ---------- Map ---------- */
+.map { margin: 1.5rem 0 0; }
+.map iframe {
+  display: block; width: 100%; aspect-ratio: 16 / 9; min-height: 260px; border: 0;
+  border-radius: 14px; background: #e8eef5;
+}
+.map figcaption { margin-top: 0.5rem; font-size: 0.9rem; }
+.rera-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+.rera-table th, .rera-table td { text-align: left; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--line); }
+.rera-table th { color: var(--ink); font-weight: 700; }
+.rera-table td { color: var(--muted); }
+.rera-table code { font-family: inherit; font-weight: 700; color: var(--ink); }
