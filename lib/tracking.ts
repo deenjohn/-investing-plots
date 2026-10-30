@@ -7,7 +7,10 @@
  *  - Meta (Instagram + Facebook):     NEXT_PUBLIC_META_PIXEL_ID                 1234567890
  *  - Microsoft Clarity:               NEXT_PUBLIC_CLARITY_ID                    abcd123xyz
  */
-export const GA_ID = match(process.env.NEXT_PUBLIC_GA_ID, /^G-[A-Z0-9]+$/);
+/** Google Analytics 4 for investingplots.com. NEXT_PUBLIC_GA_ID overrides it; set it to "off" to turn GA off. */
+const GA_DEFAULT = "G-BJ67W1E8CX";
+export const GA_ID =
+  process.env.NEXT_PUBLIC_GA_ID === "off" ? "" : match(process.env.NEXT_PUBLIC_GA_ID || GA_DEFAULT, /^G-[A-Z0-9]+$/);
 export const ADS_SEND_TO = match(process.env.NEXT_PUBLIC_GOOGLE_ADS_SEND_TO, /^AW-\d+\/[\w-]+$/);
 export const ADS_CONTACT_SEND_TO = match(process.env.NEXT_PUBLIC_GOOGLE_ADS_CONTACT_SEND_TO, /^AW-\d+\/[\w-]+$/);
 export const ADS_ID = (ADS_SEND_TO || ADS_CONTACT_SEND_TO).split("/")[0];
