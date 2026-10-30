@@ -3,7 +3,8 @@ import localFont from "next/font/local";
 import type { ReactNode } from "react";
 import { brand, SITE_URL } from "@/lib/site";
 import { description, keywords, title } from "@/lib/seo";
-import { bootScript, GA_ID, ADS_ID, PIXEL_ID } from "@/lib/tracking";
+import { SiteAnalytics } from "@/components/SiteAnalytics";
+import { ADS_ID, bootScript, CLARITY_ID, GA_ID, GTM_ID, gtmScript, PIXEL_ID } from "@/lib/tracking";
 import "./globals.css";
 
 // Self-hosted, preloaded, with a size-matched fallback so the swap causes no layout shift.
@@ -73,12 +74,27 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en-IN" className={jakarta.variable}>
       <head>
         {/* Warm up connections only when the tags are configured. */}
-        {GA_ID || ADS_ID ? <link rel="preconnect" href="https://www.googletagmanager.com" /> : null}
+        {GA_ID || ADS_ID || GTM_ID ? <link rel="preconnect" href="https://www.googletagmanager.com" /> : null}
         {PIXEL_ID ? <link rel="preconnect" href="https://connect.facebook.net" /> : null}
+        {CLARITY_ID ? <link rel="preconnect" href="https://www.clarity.ms" /> : null}
+        {/* GTM first (Google's recommended spot), then the gtag / pixel / Clarity queues. Both share window.dataLayer. */}
+        {GTM_ID ? <script dangerouslySetInnerHTML={{ __html: gtmScript() }} /> : null}
         <script dangerouslySetInnerHTML={{ __html: bootScript() }} />
       </head>
       <body>
+        {GTM_ID ? (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+              title="Google Tag Manager"
+            />
+          </noscript>
+        ) : null}
         {children}
+        <SiteAnalytics />
         {PIXEL_ID ? (
           <noscript>
             {/* eslint-disable-next-line @next/next/no-img-element */}

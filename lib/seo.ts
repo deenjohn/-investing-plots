@@ -1,4 +1,5 @@
-import { brand, contact, faqs, SITE_URL, social } from "./site";
+import type { Metadata } from "next";
+import { brand, compliance, contact, faqs, partner, SITE_URL, social } from "./site";
 
 export const title = "Invest in Plots | Gaur Yamuna City, Noida & Yamuna Expressway";
 export const description =
@@ -44,10 +45,17 @@ export function jsonLd() {
         url: `${SITE_URL}/`,
         logo: `${SITE_URL}/icon-512.png`,
         image: `${SITE_URL}/og.jpg`,
-        description: `${brand.name} helps buyers find residential, commercial, industrial and farm plots for long-term investment in India, with documents checked before purchase.`,
+        description: `${brand.name} helps buyers find residential, commercial, industrial and farm plots for long-term investment in Noida, Greater Noida and on the Yamuna Expressway, with documents checked before purchase.`,
+        ...(compliance.legalName ? { legalName: compliance.legalName } : {}),
+        ...(compliance.officeAddress ? { address: officeAddress() } : {}),
+        ...(partner.agentRera ? { identifier: { "@type": "PropertyValue", propertyID: "UP RERA agent registration", value: partner.agentRera } } : {}),
         ...(contact.phone ? { telephone: `+${contact.phone}` } : {}),
         ...(contact.email ? { email: contact.email } : {}),
-        areaServed: { "@type": "Country", name: "India" },
+        areaServed: [
+          { "@type": "City", name: "Noida" },
+          { "@type": "City", name: "Greater Noida" },
+          { "@type": "Place", name: "Yamuna Expressway (YEIDA)" },
+        ],
         contactPoint: {
           "@type": "ContactPoint",
           telephone: `+${contact.phone}`,
@@ -55,7 +63,15 @@ export function jsonLd() {
           areaServed: "IN",
           availableLanguage: ["en", "hi"],
         },
-        knowsAbout: ["Plots for investment", "Land investment", "RERA plotted developments", "Land due diligence"],
+        knowsAbout: [
+          "Plots for investment",
+          "6% plots",
+          "Gaur Yamuna City plots",
+          "Yamuna Expressway plots",
+          "Greater Noida plots",
+          "RERA plotted developments",
+          "Land due diligence",
+        ],
         ...(links.length ? { sameAs: links } : {}),
       },
       {
@@ -79,4 +95,76 @@ export function jsonLd() {
       },
     ],
   };
+}
+
+/** Firm office address for the RealEstateAgent schema, from compliance.officeAddress. */
+function officeAddress() {
+  const pin = compliance.officeAddress.match(/\b(\d{6})\b/)?.[1];
+  const street = compliance.officeAddress.split(", Greater Noida")[0];
+  return {
+    "@type": "PostalAddress",
+    streetAddress: street,
+    addressLocality: "Greater Noida",
+    addressRegion: "Uttar Pradesh",
+    ...(pin ? { postalCode: pin } : {}),
+    addressCountry: "IN",
+  };
+}
+
+const OG_IMAGE = { url: "/og.jpg", width: 1200, height: 630, alt: "Investing Plots — plots and land for investment in India" };
+
+/**
+ * Full metadata for one page. Next replaces (does not merge) openGraph and twitter from the root layout,
+ * so every page must send the whole set, or its share card loses the image, site name and locale.
+ */
+export function pageMetadata({
+  title,
+  description,
+  path,
+  keywords,
+  noindex,
+}: {
+  title: string;
+  description: string;
+  path: string;
+  keywords?: string[];
+  noindex?: boolean;
+}): Metadata {
+  return {
+    title,
+    description,
+    ...(keywords ? { keywords } : {}),
+    alternates: { canonical: path },
+    openGraph: {
+      type: "website",
+      url: path,
+      siteName: brand.name,
+      locale: "en_IN",
+      title,
+      description,
+      images: [OG_IMAGE],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [OG_IMAGE.url] },
+    robots: noindex
+      ? { index: false, follow: false, googleBot: { index: false, follow: false } }
+      : { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
+  };
+}
+
+export function breadcrumb(items: Array<{ name: string; path: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [{ name: "Home", path: "/" }, ...items].map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: `${SITE_URL}${item.path}`,
+    })),
+  };
+}
+
+/** Structured data script. Escapes "<" so the JSON cannot close the script tag. */
+export function ldJson(data: unknown) {
+  return { __html: JSON.stringify(data).replace(/</g, "\\u003c") };
 }

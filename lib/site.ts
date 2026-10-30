@@ -23,8 +23,27 @@ export const contact = {
   email: "",
 };
 
-/** Your RERA agent registration number(s). Leave "" to hide. Ad reviewers look for it. */
-export const partner = { agentRera: "" };
+/** Your UP RERA agent registration number. Leave "" to hide. Google and Meta ad reviewers look for it. */
+export const partner = { agentRera: "UPRERAAGT14805" };
+
+/**
+ * Business identity. Shown in the footer, /contact-us, /disclaimer, /privacy and the search data.
+ * Must match Google Ads advertiser verification and GST records exactly.
+ */
+export const compliance = {
+  /** Registered name of the firm. */
+  legalName: "Shivam Property",
+  /** Office address of the firm. */
+  officeAddress:
+    "1st Floor, Galaxy Blue Sapphire Plaza, above Chunmun, Haibatpur, Sector 4, Greater Noida, Uttar Pradesh 201016",
+  /** GSTIN, if registered. "" hides it. */
+  gstin: "",
+  /** Person who handles privacy requests (DPDP Act 2023). "" falls back to the firm name. */
+  grievanceOfficer: "",
+};
+
+/** Date the site content last changed (YYYY-MM-DD). Used as <lastmod> in sitemap.xml — bump it when you edit copy. */
+export const contentUpdated = "2026-10-30";
 
 /** Full https profile URLs. "" hides the link. Also used as sameAs in search data. */
 export const social = {
@@ -167,6 +186,10 @@ export function telHref() {
 export function phoneDisplay() {
   const local = contact.phone.replace(/^91/, "");
   return local.length === 10 ? `+91 ${local.slice(0, 5)} ${local.slice(5)}` : contact.phone ? `+${contact.phone}` : "";
+}
+
+export function mailHref() {
+  return contact.email ? `mailto:${contact.email}` : "";
 }
 
 export function whatsappHref(message: string) {

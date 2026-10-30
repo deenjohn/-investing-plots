@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { PhoneIcon, WaIcon } from "@/components/icons";
 import { projectPages } from "@/lib/projects";
-import { brand, defaultWhatsappText, partner, social, telHref, whatsappHref } from "@/lib/site";
+import { brand, compliance, defaultWhatsappText, partner, phoneDisplay, social, telHref, whatsappHref } from "@/lib/site";
 
 export function SiteChrome({
   nav,
@@ -57,7 +57,19 @@ export function SiteChrome({
               Investing<b>Plots</b>
             </p>
             <p>{brand.tagline}.</p>
-            {partner.agentRera ? <p>RERA agent reg. no. {partner.agentRera}</p> : null}
+            <p>
+              Run by {compliance.legalName}
+              {partner.agentRera ? ` · UP RERA agent reg. no. ${partner.agentRera}` : ""}
+            </p>
+            <p>{compliance.officeAddress}</p>
+            {tel ? (
+              <p>
+                Call / WhatsApp{" "}
+                <a href={tel} data-where="footer">
+                  {phoneDisplay()}
+                </a>
+              </p>
+            ) : null}
           </div>
           <div>
             <p className="foot-h">Projects</p>
@@ -83,7 +95,7 @@ export function SiteChrome({
               <a href="/#faq">FAQ</a>
             </p>
             <p>
-              <a href="/privacy">Privacy policy</a>
+              <a href="/contact-us">Contact us</a>
             </p>
             {socialLinks.map(([key, url]) => (
               <p key={key}>
@@ -100,8 +112,24 @@ export function SiteChrome({
             body. Information on this site is general and not financial advice. Land prices can go down as well as up;
             no return is promised or guaranteed. Verify all documents and RERA details before paying.
           </p>
+          <ul className="foot-legal">
+            <li>
+              <a href="/privacy">Privacy policy</a>
+            </li>
+            <li>
+              <a href="/terms">Terms</a>
+            </li>
+            <li>
+              <a href="/disclaimer">Disclaimer</a>
+            </li>
+            <li>
+              <a href="https://www.up-rera.in/" target="_blank" rel="noreferrer">
+                UP RERA
+              </a>
+            </li>
+          </ul>
           <p>
-            © {new Date().getFullYear()} {brand.name} · {brand.domain}
+            © {new Date().getFullYear()} {compliance.legalName} · {brand.name} · {brand.domain}
           </p>
         </div>
       </footer>

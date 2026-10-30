@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { enquiries, findEnquiry, type EnquiryId } from "@/lib/projects";
 import {
@@ -44,7 +45,13 @@ export function LeadForm({ project }: { project?: EnquiryId }) {
   const [projectId, setProjectId] = useState<EnquiryId | "">(project ?? "");
   const [company, setCompany] = useState(""); // honeypot
   const [errors, setErrors] = useState<Errors>({});
-  const [sent, setSent] = useState<{ href: string; name: string } | null>(null);
+  const [sending, setSending] = useState(false);
+  const router = useRouter();
+
+  // Warm up /thank-you so the move after sending is instant.
+  useEffect(() => {
+    router.prefetch("/thank-you");
+  }, [router]);
 
   // Ad links can preselect: /?interest=commercial&budget=25-50&city=Jaipur  (ids in lib/site.ts)
   useEffect(() => {
@@ -71,7 +78,6 @@ export function LeadForm({ project }: { project?: EnquiryId }) {
       if (pickedBudget) setBudget(pickedBudget.id);
       if (pickedProject) setProjectId(pickedProject.id);
       if (el.dataset.city) setCity(el.dataset.city);
-      setSent(null);
       window.setTimeout(() => nameRef.current?.focus({ preventScroll: true }), 400);
     };
     document.addEventListener("click", onClick);
@@ -112,10 +118,12 @@ export function LeadForm({ project }: { project?: EnquiryId }) {
       .join("\n");
     const href = whatsappHref(message);
 
+    if (sending) return;
+    setSending(true);
     if (!company) {
       // Open WhatsApp synchronously inside the tap, before anything async, so pop-up blockers allow it.
       if (href) window.open(href, "_blank", "noopener,noreferrer");
-      trackLead({ interest: chosen.label, phone: mobile, eventId });
+      trackLead({ interest: chosen.label, project: pickedProject?.label, phone: mobile, eventId });
       const body = JSON.stringify({
         name: name.trim(),
         phone: mobile,
@@ -134,7 +142,16 @@ export function LeadForm({ project }: { project?: EnquiryId }) {
         () => {},
       );
     }
-    setSent({ href, name: name.trim().split(/\s+/)[0] });
+    // /thank-you shows the "Open WhatsApp again" button and is the page to use for URL-based goals.
+    try {
+      sessionStorage.setItem(
+        "ip-thanks",
+        JSON.stringify({ href, name: name.trim().split(/\s+/)[0], project: pickedProject?.short || chosen.short }),
+      );
+    } catch {
+      /* private mode: the thank-you page falls back to a generic message */
+    }
+    router.push("/thank-you");
   }
 
   const chosen = findInterest(interest);
@@ -144,27 +161,6 @@ export function LeadForm({ project }: { project?: EnquiryId }) {
     : chosen && chosen.id !== "price-list" && chosen.id !== "site-visit"
       ? `Get ${chosen.short} options on WhatsApp`
       : "Get plot options and prices on WhatsApp";
-
-  if (sent) {
-    return (
-      <div className="form-card" id="enquire-form" role="status" aria-live="polite">
-        <p className="form-kicker">Sent</p>
-        <h2 className="form-title">Thank you, {sent.name}.</h2>
-        <p className="form-note">
-          WhatsApp has opened with your details. Tap <strong>Send</strong> there and an advisor will reply with matching
-          plots and prices.
-        </p>
-        {sent.href ? (
-          <a className="btn btn-wa btn-block" href={sent.href} target="_blank" rel="noreferrer" data-where="form-retry">
-            <WaIcon /> Open WhatsApp again
-          </a>
-        ) : null}
-        <button type="button" className="link-btn" onClick={() => setSent(null)}>
-          Send another enquiry
-        </button>
-      </div>
-    );
-  }
 
   const clear = (key: keyof Errors) => setErrors((x) => (x[key] ? { ...x, [key]: undefined } : x));
 
@@ -304,8 +300,8 @@ export function LeadForm({ project }: { project?: EnquiryId }) {
         </label>
       </div>
 
-      <button className="btn btn-wa btn-block btn-lg" type="submit">
-        <WaIcon /> Send on WhatsApp
+      <button className="btn btn-wa btn-block btn-lg" type="submit" disabled={sending}>
+        <WaIcon /> {sending ? "Opening WhatsApp…" : "Send on WhatsApp"}
       </button>
       <p className="form-legal">
         By sending, you agree to be contacted by call, WhatsApp and SMS about plots. See our{" "}

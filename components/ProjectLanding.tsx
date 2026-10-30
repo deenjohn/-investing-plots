@@ -4,6 +4,7 @@ import { LeadForm } from "@/components/LeadForm";
 import { SiteChrome } from "@/components/SiteChrome";
 import { WaIcon } from "@/components/icons";
 import { enquiryWhatsappText, projectPages, type ProjectPage } from "@/lib/projects";
+import { breadcrumb, ldJson, pageMetadata } from "@/lib/seo";
 import { brand, SITE_URL, whatsappHref } from "@/lib/site";
 
 const points = [
@@ -18,9 +19,10 @@ export function projectMetadata(project: ProjectPage): Metadata {
     "seoDescription" in project
       ? project.seoDescription
       : `Ask for ${project.name} in Noida, on the Yamuna Expressway and in Greater Noida. Get the price list and documents on WhatsApp.`;
-  return {
+  return pageMetadata({
     title,
     description,
+    path: project.path,
     keywords: [
       project.name,
       `${project.name} Noida`,
@@ -29,10 +31,7 @@ export function projectMetadata(project: ProjectPage): Metadata {
       "plots in Gaur Yamuna City",
       "6% plots Noida",
     ],
-    alternates: { canonical: project.path },
-    openGraph: { title, description, url: project.path },
-    twitter: { title, description },
-  };
+  });
 }
 
 export function ProjectLanding({ project, children }: { project: ProjectPage; children?: ReactNode }) {
@@ -43,12 +42,14 @@ export function ProjectLanding({ project, children }: { project: ProjectPage; ch
     "@type": "WebPage",
     "@id": `${SITE_URL}${project.path}#webpage`,
     url: `${SITE_URL}${project.path}`,
-    name: project.name,
+    name: "heading" in project ? project.heading : project.name,
     description: project.blurb,
     isPartOf: { "@id": `${SITE_URL}/#website` },
-    about: { "@id": `${SITE_URL}/#org` },
+    publisher: { "@id": `${SITE_URL}/#org` },
+    primaryImageOfPage: `${SITE_URL}/og.jpg`,
     inLanguage: "en-IN",
   };
+  const crumbs = breadcrumb([{ name: project.name, path: project.path }]);
 
   return (
     <SiteChrome
@@ -58,7 +59,8 @@ export function ProjectLanding({ project, children }: { project: ProjectPage; ch
         { href: "#enquire", label: "Enquire" },
       ]}
     >
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldJson(jsonLd)} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldJson(crumbs)} />
       <main id="main">
         <section className="hero" id="enquire" aria-labelledby="hero-title">
           <div className="wrap hero-grid">

@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
     return [
       // Apex → www happens in the Vercel domain settings. These keep old/short links working.
       { source: "/whatsapp", destination: "/#enquire", permanent: false },
+      { source: "/contact", destination: "/contact-us", permanent: true },
+      { source: "/about", destination: "/contact-us", permanent: true },
+      { source: "/about-us", destination: "/contact-us", permanent: true },
+      { source: "/privacy-policy", destination: "/privacy", permanent: true },
     ];
   },
   async headers() {
@@ -34,6 +38,7 @@ const nextConfig: NextConfig = {
         ],
       },
       { source: "/api/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex" }] },
+      { source: "/thank-you", headers: [{ key: "X-Robots-Tag", value: "noindex" }] },
     ];
   },
 };
